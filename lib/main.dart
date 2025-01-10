@@ -148,11 +148,29 @@ class _HomePageState extends State<HomePage> {
         builder: (context, setState) => Directionality(
           textDirection: TextDirection.rtl,
           child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            backgroundColor: Colors.white,
             title: Row(
               children: [
-                Icon(Icons.medication, color: Colors.blue),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(Icons.medication, color: Colors.blue, size: 24),
+                ),
                 SizedBox(width: 8),
-                Text("افزودن دارو"),
+                Text(
+                  "افزودن دارو",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.blueAccent,
+                  ),
+                ),
               ],
             ),
             content: Directionality(
@@ -166,176 +184,103 @@ class _HomePageState extends State<HomePage> {
                       DropdownButtonFormField<String>(
                         decoration: InputDecoration(
                           labelText: "نوع دارو",
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          labelStyle: TextStyle(color: Colors.blue),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 15, 227, 209),
-                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
                           ),
                         ),
                         items: [
                           DropdownMenuItem(
-                              value: "قرص",
-                              child: Text(
-                                "قرص",
-                                textAlign: TextAlign.right,
-                              )),
+                            value: "قرص",
+                            child: Text("قرص"),
+                          ),
                           DropdownMenuItem(
-                              value: "شربت",
-                              child: Text(
-                                "شربت",
-                                textAlign: TextAlign.right,
-                              )),
+                            value: "شربت",
+                            child: Text("شربت"),
+                          ),
                           DropdownMenuItem(
-                              value: "قطره",
-                              child: Text(
-                                "قطره",
-                                textAlign: TextAlign.right,
-                              )),
+                            value: "قطره",
+                            child: Text("قطره"),
+                          ),
                           DropdownMenuItem(
-                              value: "پماد",
-                              child: Text(
-                                "پماد",
-                                textAlign: TextAlign.right,
-                              )),
+                            value: "پماد",
+                            child: Text("پماد"),
+                          ),
                         ],
                         onChanged: (value) =>
                             setState(() => selectedType = value),
                         validator: (value) =>
                             value == null ? "نوع دارو را انتخاب کنید" : null,
                       ),
-                      SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "نام دارو",
-                          prefixIcon: Icon(Icons.edit),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 15, 227, 209),
-                            ),
-                          ),
-                        ),
-                        onChanged: (value) => medicineName = value,
-                        validator: (value) => value == null || value.isEmpty
-                            ? "نام دارو را وارد کنید (مثال: آسپرین)"
-                            : null,
+                      SizedBox(height: 15),
+                      _buildTextFormField(
+                        "نام دارو",
+                        Icons.edit,
+                        (value) => medicineName = value,
+                        "نام دارو را وارد کنید",
+                        initialValue: '',
                       ),
-                      SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: selectedType == "قرص"
-                              ? "دوز مصرف (mg)"
-                              : "دوز مصرف (cc)",
-                          prefixIcon: Icon(
-                            Icons.local_hospital,
-                            color: Colors.red,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 15, 227, 209),
-                            ),
-                          ),
-                        ),
-                        onChanged: (value) => dosage = value,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "دوز مصرف را وارد کنید (مثال: 500 mg یا 10 cc)";
-                          } else if (double.tryParse(value) == null) {
-                            return "لطفاً مقدار عددی وارد کنید";
-                          }
-                          return null;
-                        },
+                      SizedBox(height: 15),
+                      _buildTextFormField(
+                        selectedType == "قرص"
+                            ? "دوز مصرف (mg)"
+                            : "دوز مصرف (cc)",
+                        Icons.local_hospital,
+                        (value) => dosage = value,
+                        "دوز مصرف را وارد کنید",
+                        isNumber: true,
+                        initialValue: '',
                       ),
-                      SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "فاصله زمانی مصرف (ساعت)",
-                          prefixIcon: Icon(
-                            Icons.access_time,
-                            color: Colors.lightBlue,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 15, 227, 209),
-                            ),
-                          ),
-                        ),
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) => interval = value,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "فاصله زمانی مصرف را وارد کنید (مثال: 8 ساعت)";
-                          } else if (int.tryParse(value) == null) {
-                            return "لطفاً مقدار عددی وارد کنید";
-                          }
-                          return null;
-                        },
+                      SizedBox(height: 15),
+                      _buildTextFormField(
+                        "فاصله زمانی مصرف (ساعت)",
+                        Icons.access_time,
+                        (value) => interval = value,
+                        "فاصله زمانی مصرف را وارد کنید",
+                        isNumber: true,
+                        initialValue: '',
                       ),
-                      SizedBox(height: 10),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "مدت زمان مصرف (روز)",
-                          prefixIcon: Icon(
-                            Icons.calendar_today,
-                            color: Colors.lightGreen,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 15, 227, 209),
-                            ),
-                          ),
-                        ),
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) => duration = value,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "مدت زمان مصرف را وارد کنید (مثال: 7 روز)";
-                          } else if (int.tryParse(value) == null) {
-                            return "لطفاً مقدار عددی وارد کنید";
-                          }
-                          return null;
-                        },
+                      SizedBox(height: 15),
+                      _buildTextFormField(
+                        "مدت زمان مصرف (روز)",
+                        Icons.calendar_today,
+                        (value) => duration = value,
+                        "مدت زمان مصرف را وارد کنید",
+                        isNumber: true,
+                        initialValue: '',
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 15),
                       DropdownButtonFormField<String>(
                         decoration: InputDecoration(
                           labelText: "صدای هشدار",
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          labelStyle: TextStyle(color: Colors.blue),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 15, 227, 209),
-                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
                           ),
                         ),
                         items: [
                           DropdownMenuItem(
-                              value: "پیش‌فرض",
-                              child: Text(
-                                "پیش‌فرض",
-                                textAlign: TextAlign.right,
-                              )),
+                            value: "پیش‌فرض",
+                            child: Text("پیش‌فرض"),
+                          ),
                           DropdownMenuItem(
-                              value: "زنگ 1",
-                              child: Text(
-                                "زنگ اول",
-                                textAlign: TextAlign.right,
-                              )),
+                            value: "زنگ 1",
+                            child: Text("زنگ اول"),
+                          ),
                           DropdownMenuItem(
-                              value: "زنگ 2",
-                              child: Text(
-                                "زنگ دوم",
-                                textAlign: TextAlign.right,
-                              )),
+                            value: "زنگ 2",
+                            child: Text("زنگ دوم"),
+                          ),
                           DropdownMenuItem(
-                              value: "زنگ 3",
-                              child: Text(
-                                "زنگ سوم",
-                                textAlign: TextAlign.right,
-                              )),
+                            value: "زنگ 3",
+                            child: Text("زنگ سوم"),
+                          ),
                         ],
                         onChanged: (value) =>
                             setState(() => selectedAlarm = value!),
@@ -346,29 +291,79 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             actions: [
-              TextButton(
-                child: Text("افزودن", style: TextStyle(color: Colors.blue)),
+              ElevatedButton.icon(
+                label: Text("افزودن"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _addMedicine(
-                        selectedType!,
-                        medicineName,
-                        dosage,
-                        int.parse(interval),
-                        int.parse(duration),
-                        selectedAlarm);
+                      selectedType!,
+                      medicineName,
+                      dosage,
+                      int.parse(interval),
+                      int.parse(duration),
+                      selectedAlarm,
+                    );
                     Navigator.of(ctx).pop();
                   }
                 },
               ),
-              TextButton(
-                child: Text("لغو", style: TextStyle(color: Colors.red)),
+              ElevatedButton.icon(
+                label: Text("لغو"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
                 onPressed: () => Navigator.of(ctx).pop(),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextFormField(
+    String label,
+    IconData icon,
+    Function(String) onChanged,
+    String errorMessage, {
+    bool isNumber = false,
+    required String initialValue,
+  }) {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Colors.blue),
+        filled: true,
+        fillColor: Colors.grey[100],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+      onChanged: onChanged,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return errorMessage;
+        }
+        if (isNumber && double.tryParse(value) == null) {
+          return "لطفاً مقدار عددی وارد کنید";
+        }
+        return null;
+      },
     );
   }
 
@@ -403,15 +398,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // ویرایش دارو
   void _editMedicine(int index) {
-    String medicineName = _medicines[index]['name'] ?? '';
-    String dosage = _medicines[index]['dosage'] ?? '';
-    String interval = _medicines[index]['interval']?.toString() ?? '1';
-    String duration = _medicines[index]['duration']?.toString() ?? '1';
-    String selectedType = _medicines[index]['type'] ?? 'قرص';
-    String selectedAlarm = _medicines[index]['alarmSound'] ?? 'پیش‌فرض';
-    int remainingDoses = _medicines[index]['remainingDoses'] ?? 0;
+    String medicineName = _medicines[index]['name'];
+    String dosage = _medicines[index]['dosage'];
+    String interval = _medicines[index]['interval'].toString();
+    String duration = _medicines[index]['duration'].toString();
+    String selectedType = _medicines[index]['type'];
+    String selectedAlarm = _medicines[index]['alarmSound'];
+    int remainingDoses = _medicines[index]['remainingDoses'];
     final _formKey = GlobalKey<FormState>();
 
     showDialog(
@@ -420,11 +414,29 @@ class _HomePageState extends State<HomePage> {
         builder: (context, setState) => Directionality(
           textDirection: TextDirection.rtl,
           child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            backgroundColor: Colors.white,
             title: Row(
               children: [
-                Icon(Icons.medication, color: Colors.blue),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(Icons.medication, color: Colors.blue, size: 24),
+                ),
                 SizedBox(width: 8),
-                Text("ویرایش دارو"),
+                Text(
+                  "ویرایش دارو",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Colors.blueAccent,
+                  ),
+                ),
               ],
             ),
             content: SingleChildScrollView(
@@ -436,38 +448,31 @@ class _HomePageState extends State<HomePage> {
                     DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         labelText: "نوع دارو",
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                        labelStyle: TextStyle(color: Colors.blue),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 15, 227, 209),
-                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
                         ),
                       ),
                       items: [
                         DropdownMenuItem(
-                            value: "قرص",
-                            child: Text(
-                              "قرص",
-                              textAlign: TextAlign.right,
-                            )),
+                          value: "قرص",
+                          child: Text("قرص"),
+                        ),
                         DropdownMenuItem(
-                            value: "شربت",
-                            child: Text(
-                              "شربت",
-                              textAlign: TextAlign.right,
-                            )),
+                          value: "شربت",
+                          child: Text("شربت"),
+                        ),
                         DropdownMenuItem(
-                            value: "قطره",
-                            child: Text(
-                              "قطره",
-                              textAlign: TextAlign.right,
-                            )),
+                          value: "قطره",
+                          child: Text("قطره"),
+                        ),
                         DropdownMenuItem(
-                            value: "پماد",
-                            child: Text(
-                              "پماد",
-                              textAlign: TextAlign.right,
-                            )),
+                          value: "پماد",
+                          child: Text("پماد"),
+                        ),
                       ],
                       onChanged: (value) =>
                           setState(() => selectedType = value!),
@@ -475,121 +480,48 @@ class _HomePageState extends State<HomePage> {
                       validator: (value) =>
                           value == null ? "نوع دارو را انتخاب کنید" : null,
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "نام دارو",
-                        prefixIcon: Icon(Icons.edit),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 15, 227, 209),
-                          ),
-                        ),
-                      ),
+                    SizedBox(height: 15),
+                    _buildTextFormField(
+                      "نام دارو",
+                      Icons.edit,
+                      (value) => medicineName = value,
+                      "نام دارو را وارد کنید",
                       initialValue: _medicines[index]['name'],
-                      onChanged: (value) => medicineName = value,
-                      validator: (value) => value == null || value.isEmpty
-                          ? "نام دارو را وارد کنید"
-                          : null,
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: selectedType == "قرص"
-                            ? "دوز مصرف (mg)"
-                            : "دوز مصرف (cc)",
-                        prefixIcon: Icon(
-                          Icons.local_hospital,
-                          color: Colors.red,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 15, 227, 209),
-                          ),
-                        ),
-                      ),
+                    SizedBox(height: 15),
+                    _buildTextFormField(
+                      selectedType == "قرص" ? "دوز مصرف (mg)" : "دوز مصرف (cc)",
+                      Icons.local_hospital,
+                      (value) => dosage = value,
+                      "دوز مصرف را وارد کنید",
+                      isNumber: true,
                       initialValue: _medicines[index]['dosage'],
-                      onChanged: (value) => dosage = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "دوز مصرف را وارد کنید";
-                        } else if (double.tryParse(value) == null) {
-                          return "لطفاً مقدار عددی وارد کنید";
-                        }
-                        return null;
-                      },
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "فاصله زمانی مصرف (ساعت)",
-                        prefixIcon: Icon(
-                          Icons.access_time,
-                          color: Colors.lightBlue,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 15, 227, 209),
-                          ),
-                        ),
-                      ),
+                    SizedBox(height: 15),
+                    _buildTextFormField(
+                      "فاصله زمانی مصرف (ساعت)",
+                      Icons.access_time,
+                      (value) => interval = value,
+                      "فاصله زمانی مصرف را وارد کنید",
+                      isNumber: true,
                       initialValue: interval,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => interval = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "فاصله زمانی مصرف را وارد کنید";
-                        } else if (int.tryParse(value) == null) {
-                          return "لطفاً مقدار عددی وارد کنید";
-                        }
-                        return null;
-                      },
                     ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "مدت زمان مصرف (روز)",
-                        prefixIcon: Icon(
-                          Icons.calendar_today,
-                          color: Colors.lightGreen,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 15, 227, 209),
-                          ),
-                        ),
-                      ),
+                    SizedBox(height: 15),
+                    _buildTextFormField(
+                      "مدت زمان مصرف (روز)",
+                      Icons.calendar_today,
+                      (value) => duration = value,
+                      "مدت زمان مصرف را وارد کنید",
+                      isNumber: true,
                       initialValue: duration,
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => duration = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "مدت زمان مصرف را وارد کنید";
-                        } else if (int.tryParse(value) == null) {
-                          return "لطفاً مقدار عددی وارد کنید";
-                        }
-                        return null;
-                      },
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text("تعداد باقی‌مانده مصرف: $remainingDoses"),
                         Row(
                           children: [
-                            IconButton(
-                              icon: Icon(Icons.add, color: Colors.green),
-                              onPressed: () {
-                                setState(() {
-                                  remainingDoses++;
-                                });
-                              },
-                            ),
                             IconButton(
                               icon: Icon(Icons.remove, color: Colors.red),
                               onPressed: () {
@@ -600,11 +532,19 @@ class _HomePageState extends State<HomePage> {
                                 });
                               },
                             ),
+                            IconButton(
+                              icon: Icon(Icons.add, color: Colors.green),
+                              onPressed: () {
+                                setState(() {
+                                  remainingDoses++;
+                                });
+                              },
+                            ),
                           ],
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 15),
                     Row(
                       children: List.generate(
                         24 ~/ int.parse(interval),
@@ -612,78 +552,62 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             height: 10,
                             margin: EdgeInsets.symmetric(horizontal: 2),
-                            color: i < remainingDoses
-                                ? Colors.green
-                                : Colors.grey[300],
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              gradient: LinearGradient(
+                                colors: i < remainingDoses
+                                    ? [Colors.green, Colors.lightGreenAccent]
+                                    : [Colors.grey[300]!, Colors.grey[100]!],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: "صدای هشدار",
-                        border: OutlineInputBorder(),
-                      ),
-                      value: selectedAlarm,
-                      items: [
-                        DropdownMenuItem(
-                            value: "پیش‌فرض",
-                            child: Text(
-                              "پیش‌فرض",
-                              textAlign: TextAlign.right,
-                            )),
-                        DropdownMenuItem(
-                            value: "زنگ 1",
-                            child: Text(
-                              "زنگ اول",
-                              textAlign: TextAlign.right,
-                            )),
-                        DropdownMenuItem(
-                            value: "زنگ 2",
-                            child: Text(
-                              "زنگ دوم",
-                              textAlign: TextAlign.right,
-                            )),
-                        DropdownMenuItem(
-                            value: "زنگ 3",
-                            child: Text(
-                              "زنگ سوم",
-                              textAlign: TextAlign.right,
-                            )),
-                      ],
-                      onChanged: (value) =>
-                          setState(() => selectedAlarm = value!),
                     ),
                   ],
                 ),
               ),
             ),
             actions: [
-              TextButton(
-                child: Text("ویرایش", style: TextStyle(color: Colors.blue)),
+              ElevatedButton.icon(
+                label: Text("ذخیره"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     setState(() {
                       _medicines[index] = {
-                        'type': selectedType,
                         'name': medicineName,
                         'dosage': dosage,
-                        'interval': int.tryParse(interval) ?? 1,
-                        'duration': int.tryParse(duration) ?? 1,
-                        'remainingDays': int.tryParse(duration) ?? 1,
-                        'remainingDoses': remainingDoses,
-                        'startTime': _medicines[index]['startTime'],
+                        'interval': int.parse(interval),
+                        'duration': int.parse(duration),
+                        'type': selectedType,
                         'alarmSound': selectedAlarm,
+                        'remainingDoses': remainingDoses,
                       };
-                      print("Updated medicine: ${_medicines[index]}");
                     });
                     Navigator.of(ctx).pop();
                   }
                 },
               ),
-              TextButton(
-                child: Text("لغو", style: TextStyle(color: Colors.red)),
+              ElevatedButton.icon(
+                label: Text("لغو"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
                 onPressed: () => Navigator.of(ctx).pop(),
               ),
             ],
@@ -830,29 +754,30 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 ElevatedButton.icon(
-                                  key: ValueKey(
-                                      "edit-${_medicines[index]['id']}"),
-                                  icon: Icon(
-                                    Icons.edit,
-                                    size: 18,
-                                    color: Colors.white,
-                                  ),
-                                  label: Text(
-                                    "ویرایش",
-                                    style: TextStyle(
+                                    key: ValueKey(
+                                        "edit-${_medicines[index]['id']}"),
+                                    icon: Icon(
+                                      Icons.edit,
+                                      size: 18,
                                       color: Colors.white,
                                     ),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Colors.blueAccent, // رنگ دکمه ویرایش
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          10), // گوشه‌های دکمه
+                                    label: Text(
+                                      "ویرایش",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  onPressed: () => _editMedicine(index),
-                                ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Colors.blueAccent, // رنگ دکمه ویرایش
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            10), // گوشه‌های دکمه
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      _editMedicine(index);
+                                    }),
                                 SizedBox(width: 10),
                                 ElevatedButton.icon(
                                   key: ValueKey(
