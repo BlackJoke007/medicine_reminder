@@ -11,6 +11,8 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -31,6 +33,8 @@ class _MyAppState extends State<MyApp> {
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -78,7 +82,7 @@ class _HomePageState extends State<HomePage> {
       builder: (ctx) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
-          title: Text(
+          title: const Text(
             "یادآوری",
             style: TextStyle(fontFamily: "Vazir.ttf"),
           ),
@@ -86,7 +90,7 @@ class _HomePageState extends State<HomePage> {
               "زمان مصرف دارو $medicineName فرا رسیده است! لطفاً دارو را مصرف کنید."),
           actions: [
             TextButton(
-              child: Text(
+              child: const Text(
                 "مصرف دارو",
                 style: TextStyle(color: Colors.lightBlue),
               ),
@@ -97,13 +101,13 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             TextButton(
-              child: Text(
+              child: const Text(
                 "لغو",
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
                 Navigator.of(ctx).pop();
-                Timer(Duration(minutes: 10), () {
+                Timer(const Duration(minutes: 10), () {
                   _showReminderDialog(medicineName, intervalHours);
                 });
               },
@@ -140,7 +144,7 @@ class _HomePageState extends State<HomePage> {
     String interval = "";
     String duration = "";
     String selectedAlarm = "پیش‌فرض";
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     showDialog(
       context: context,
@@ -159,11 +163,12 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.blue.withOpacity(0.2),
                     shape: BoxShape.circle,
                   ),
-                  padding: EdgeInsets.all(8),
-                  child: Icon(Icons.medication, color: Colors.blue, size: 24),
+                  padding: const EdgeInsets.all(8),
+                  child: const Icon(Icons.medication,
+                      color: Colors.blue, size: 24),
                 ),
-                SizedBox(width: 8),
-                Text(
+                const SizedBox(width: 8),
+                const Text(
                   "افزودن دارو",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -177,7 +182,7 @@ class _HomePageState extends State<HomePage> {
               textDirection: TextDirection.rtl,
               child: SingleChildScrollView(
                 child: Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -186,13 +191,13 @@ class _HomePageState extends State<HomePage> {
                           labelText: "نوع دارو",
                           filled: true,
                           fillColor: Colors.grey[100],
-                          labelStyle: TextStyle(color: Colors.blue),
+                          labelStyle: const TextStyle(color: Colors.blue),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
                           ),
                         ),
-                        items: [
+                        items: const [
                           DropdownMenuItem(
                             value: "قرص",
                             child: Text("قرص"),
@@ -215,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                         validator: (value) =>
                             value == null ? "نوع دارو را انتخاب کنید" : null,
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       _buildTextFormField(
                         "نام دارو",
                         Icons.edit,
@@ -223,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                         "نام دارو را وارد کنید",
                         initialValue: '',
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       _buildTextFormField(
                         selectedType == "قرص"
                             ? "دوز مصرف (mg)"
@@ -234,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                         isNumber: true,
                         initialValue: '',
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       _buildTextFormField(
                         "فاصله زمانی مصرف (ساعت)",
                         Icons.access_time,
@@ -243,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                         isNumber: true,
                         initialValue: '',
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       _buildTextFormField(
                         "مدت زمان مصرف (روز)",
                         Icons.calendar_today,
@@ -252,19 +257,19 @@ class _HomePageState extends State<HomePage> {
                         isNumber: true,
                         initialValue: '',
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       DropdownButtonFormField<String>(
                         decoration: InputDecoration(
                           labelText: "صدای هشدار",
                           filled: true,
                           fillColor: Colors.grey[100],
-                          labelStyle: TextStyle(color: Colors.blue),
+                          labelStyle: const TextStyle(color: Colors.blue),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
                           ),
                         ),
-                        items: [
+                        items: const [
                           DropdownMenuItem(
                             value: "پیش‌فرض",
                             child: Text("پیش‌فرض"),
@@ -292,17 +297,18 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: [
               ElevatedButton.icon(
-                label: Text("افزودن"),
+                label: const Text("افزودن"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 ),
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (formKey.currentState!.validate()) {
                     _addMedicine(
                       selectedType!,
                       medicineName,
@@ -316,14 +322,15 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               ElevatedButton.icon(
-                label: Text("لغو"),
+                label: const Text("لغو"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 ),
                 onPressed: () => Navigator.of(ctx).pop(),
               ),
@@ -367,18 +374,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // حذف دارو
   void _deleteMedicine(int index) {
     showDialog(
       context: context,
       builder: (ctx) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
-          title: Text("حذف دارو"),
-          content: Text("آیا مطمئن هستید که می‌خواهید این دارو را حذف کنید؟"),
+          title: const Text("حذف دارو"),
+          content:
+              const Text("آیا مطمئن هستید که می‌خواهید این دارو را حذف کنید؟"),
           actions: [
             TextButton(
-              child: Text("حذف", style: TextStyle(color: Colors.blue)),
+              child: const Text("حذف", style: TextStyle(color: Colors.blue)),
               onPressed: () {
                 setState(() {
                   _medicines.removeAt(index);
@@ -387,7 +394,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             TextButton(
-              child: Text("لغو", style: TextStyle(color: Colors.red)),
+              child: const Text("لغو", style: TextStyle(color: Colors.red)),
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
@@ -406,8 +413,8 @@ class _HomePageState extends State<HomePage> {
     String selectedType = _medicines[index]['type'];
     String selectedAlarm = _medicines[index]['alarmSound'];
     int remainingDoses = _medicines[index]['remainingDoses'];
-    final _formKey = GlobalKey<FormState>();
-
+    final formKey = GlobalKey<FormState>();
+    
     showDialog(
       context: context,
       builder: (ctx) => StatefulBuilder(
@@ -425,11 +432,12 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.blue.withOpacity(0.2),
                     shape: BoxShape.circle,
                   ),
-                  padding: EdgeInsets.all(8),
-                  child: Icon(Icons.medication, color: Colors.blue, size: 24),
+                  padding: const EdgeInsets.all(8),
+                  child: const Icon(Icons.medication,
+                      color: Colors.blue, size: 24),
                 ),
-                SizedBox(width: 8),
-                Text(
+                const SizedBox(width: 8),
+                const Text(
                   "ویرایش دارو",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -441,7 +449,7 @@ class _HomePageState extends State<HomePage> {
             ),
             content: SingleChildScrollView(
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -450,13 +458,13 @@ class _HomePageState extends State<HomePage> {
                         labelText: "نوع دارو",
                         filled: true,
                         fillColor: Colors.grey[100],
-                        labelStyle: TextStyle(color: Colors.blue),
+                        labelStyle: const TextStyle(color: Colors.blue),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      items: [
+                      items: const [
                         DropdownMenuItem(
                           value: "قرص",
                           child: Text("قرص"),
@@ -480,7 +488,7 @@ class _HomePageState extends State<HomePage> {
                       validator: (value) =>
                           value == null ? "نوع دارو را انتخاب کنید" : null,
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     _buildTextFormField(
                       "نام دارو",
                       Icons.edit,
@@ -488,7 +496,7 @@ class _HomePageState extends State<HomePage> {
                       "نام دارو را وارد کنید",
                       initialValue: _medicines[index]['name'],
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     _buildTextFormField(
                       selectedType == "قرص" ? "دوز مصرف (mg)" : "دوز مصرف (cc)",
                       Icons.local_hospital,
@@ -497,7 +505,7 @@ class _HomePageState extends State<HomePage> {
                       isNumber: true,
                       initialValue: _medicines[index]['dosage'],
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     _buildTextFormField(
                       "فاصله زمانی مصرف (ساعت)",
                       Icons.access_time,
@@ -506,7 +514,7 @@ class _HomePageState extends State<HomePage> {
                       isNumber: true,
                       initialValue: interval,
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     _buildTextFormField(
                       "مدت زمان مصرف (روز)",
                       Icons.calendar_today,
@@ -515,7 +523,7 @@ class _HomePageState extends State<HomePage> {
                       isNumber: true,
                       initialValue: duration,
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -523,7 +531,7 @@ class _HomePageState extends State<HomePage> {
                         Row(
                           children: [
                             IconButton(
-                              icon: Icon(Icons.remove, color: Colors.red),
+                              icon: const Icon(Icons.remove, color: Colors.red),
                               onPressed: () {
                                 setState(() {
                                   if (remainingDoses > 0) {
@@ -533,7 +541,7 @@ class _HomePageState extends State<HomePage> {
                               },
                             ),
                             IconButton(
-                              icon: Icon(Icons.add, color: Colors.green),
+                              icon: const Icon(Icons.add, color: Colors.green),
                               onPressed: () {
                                 setState(() {
                                   remainingDoses++;
@@ -544,14 +552,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Row(
                       children: List.generate(
                         24 ~/ int.parse(interval),
                         (i) => Expanded(
                           child: Container(
                             height: 10,
-                            margin: EdgeInsets.symmetric(horizontal: 2),
+                            margin: const EdgeInsets.symmetric(horizontal: 2),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               gradient: LinearGradient(
@@ -572,17 +580,18 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: [
               ElevatedButton.icon(
-                label: Text("ذخیره"),
+                label: const Text("ذخیره"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 ),
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (formKey.currentState!.validate()) {
                     setState(() {
                       _medicines[index] = {
                         'name': medicineName,
@@ -599,14 +608,15 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               ElevatedButton.icon(
-                label: Text("لغو"),
+                label: const Text("لغو"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 ),
                 onPressed: () => Navigator.of(ctx).pop(),
               ),
@@ -623,7 +633,7 @@ class _HomePageState extends State<HomePage> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             "خانه",
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
@@ -632,32 +642,32 @@ class _HomePageState extends State<HomePage> {
         body: Stack(
           children: [
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/medicine.jpg'),
-                  fit: BoxFit.cover, // اندازه تصویر
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            // محتوای اصلی برنامه
             _medicines.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text(
                       "هنوز هیچ دارویی اضافه نشده است!",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
                 : ListView.builder(
-                    key: ValueKey(_medicines), // کلید یکتا برای لیست
+                    key: ValueKey(_medicines),
                     itemCount: _medicines.length,
                     itemBuilder: (ctx, index) => Card(
                       key: ValueKey(
-                          _medicines[index]['id']), // کلید یکتا برای هر کارت
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                          _medicines[index]['id']),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 12),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15), // گوشه‌های گرد
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      elevation: 4, // سایه برای کارت
+                      elevation: 4,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
@@ -667,74 +677,75 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  _medicines[index]['name'], // نمایش نام دارو
+                                  _medicines[index]['name'],
                                   key: ValueKey(
                                       "name-${_medicines[index]['id']}"),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     color:
-                                        Colors.blueAccent, // رنگ آبی برای نام
+                                        Colors.blueAccent,
                                   ),
                                 ),
-                                Icon(
+                                const Icon(
                                   Icons.medical_services,
                                   color: Colors.blueAccent,
-                                ), // آیکون مرتبط
+                                ),
                               ],
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Divider(
                                 color: Colors.grey[300],
-                                thickness: 1), // خط جداکننده
-                            SizedBox(height: 10),
+                                thickness: 1),
+                            const SizedBox(height: 10),
                             Text(
                               "نوع: ${_medicines[index]['type'] ?? 'نامشخص'}",
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                               key: ValueKey("type-${_medicines[index]['id']}"),
                             ),
                             Text(
                               "دوز: ${_medicines[index]['dosage'] ?? 'نامشخص'}",
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                               key:
                                   ValueKey("dosage-${_medicines[index]['id']}"),
                             ),
                             Text(
                               "فاصله با دوز قبلی: ${_medicines[index]['interval'] ?? 'نامشخص'} ساعت",
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                               key: ValueKey(
                                   "interval-${_medicines[index]['id']}"),
                             ),
                             Text(
                               "مدت زمان مصرف: ${_medicines[index]['duration'] ?? 'نامشخص'} روز",
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                               key: ValueKey(
                                   "duration-${_medicines[index]['id']}"),
                             ),
                             Text(
                               "روزهای باقی‌مانده: ${_medicines[index]['remainingDays'] ?? 'نامشخص'} روز",
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                               key: ValueKey(
                                   "remainingDays-${_medicines[index]['id']}"),
                             ),
                             Text(
                               "صدای هشدار: ${_medicines[index]['alarmSound'] ?? 'نامشخص'}",
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                               key: ValueKey(
                                   "alarmSound-${_medicines[index]['id']}"),
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             Row(
                               children: List.generate(
                                 24 ~/
                                     (_medicines[index]['interval'] ??
-                                        1), // نوار پیشرفت
+                                        1),
                                 (i) => Expanded(
                                   child: Container(
                                     key: ValueKey(
-                                        "progress-$i-${_medicines[index]['id']}"), // کلید یکتا برای هر نوار
+                                        "progress-$i-${_medicines[index]['id']}"),
                                     height: 10,
-                                    margin: EdgeInsets.symmetric(horizontal: 2),
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 2),
                                     decoration: BoxDecoration(
                                       color: i <
                                               (_medicines[index]
@@ -743,25 +754,25 @@ class _HomePageState extends State<HomePage> {
                                           ? Colors.green
                                           : Colors.grey[300],
                                       borderRadius: BorderRadius.circular(
-                                          5), // گوشه‌های گرد نوار
+                                          5),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 ElevatedButton.icon(
                                     key: ValueKey(
                                         "edit-${_medicines[index]['id']}"),
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.edit,
                                       size: 18,
                                       color: Colors.white,
                                     ),
-                                    label: Text(
+                                    label: const Text(
                                       "ویرایش",
                                       style: TextStyle(
                                         color: Colors.white,
@@ -769,25 +780,25 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:
-                                          Colors.blueAccent, // رنگ دکمه ویرایش
+                                          Colors.blueAccent,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(
-                                            10), // گوشه‌های دکمه
+                                            10),
                                       ),
                                     ),
                                     onPressed: () {
                                       _editMedicine(index);
                                     }),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 ElevatedButton.icon(
                                   key: ValueKey(
                                       "delete-${_medicines[index]['id']}"),
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.delete,
                                     size: 18,
                                     color: Colors.white,
                                   ),
-                                  label: Text(
+                                  label: const Text(
                                     "حذف",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -795,7 +806,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
-                                        Colors.redAccent, // رنگ دکمه حذف
+                                        Colors.redAccent,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
@@ -812,10 +823,10 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromARGB(255, 15, 227, 209),
-          child: Icon(Icons.medication, color: Colors.white),
-          shape: CircleBorder(),
+          backgroundColor: const Color.fromARGB(255, 15, 227, 209),
+          shape: const CircleBorder(),
           onPressed: _openAddMedicineDialog,
+          child: Icon(Icons.medication, color: Colors.white),
         ),
       ),
     );
